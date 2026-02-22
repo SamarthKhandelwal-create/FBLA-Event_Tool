@@ -41,29 +41,32 @@ function isTeamEvent(type: string): boolean {
  * Count how many other competitors/teams are in the same event.
  *
  * For individual events, counts other people.
- * For team events, counts other teams (unique schools), since teammates
- * from the same school form a single competing unit.
+ * For team events, counts other teams identified by unique (school + startTime)
+ * pairs, since a school may enter multiple teams in the same event
+ * distinguished by different time slots.
  */
 function countCompetitors(
   eventName: string,
   personName: string,
   personSchool: string,
   teamEvent: boolean,
+  personStartTime?: string,
 ): number {
   if (teamEvent) {
-    // Count distinct schools that have at least one person in this event,
-    // excluding the current person's school.
-    const schools = new Set<string>();
+    // Count distinct teams (school + startTime pairs) in this event,
+    // excluding the current person's own team.
+    const teams = new Set<string>();
     for (const person of Object.values(schedule)) {
-      if (person.school === personSchool) continue;
       for (const e of person.events) {
         if (e.competition === eventName) {
-          schools.add(person.school);
-          break;
+          const teamKey = `${person.school}|${e.startTime}`;
+          // Skip the queried person's own team
+          if (person.school === personSchool && e.startTime === personStartTime) continue;
+          teams.add(teamKey);
         }
       }
     }
-    return schools.size;
+    return teams.size;
   }
 
   // Individual event — count other people.
@@ -189,7 +192,7 @@ function enrichPerson(person: RawPerson) {
           bizybearUrl: meta?.bizybearUrl ?? null,
           isObjectiveTest: e.category === "Objective Test",
           isTeamEvent: team,
-          competitorCount: countCompetitors(e.competition, person.name, person.school, team),
+          competitorCount: countCompetitors(e.competition, person.name, person.school, team, e.startTime),
         };
       }),
   };
