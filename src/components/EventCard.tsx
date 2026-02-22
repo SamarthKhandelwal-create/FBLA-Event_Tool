@@ -26,6 +26,7 @@ export interface EventInfo {
   rubricUrl: string;
   bizybearUrl: string | null;
   isObjectiveTest: boolean;
+  isTeamEvent: boolean;
   competitorCount: number;
 }
 
@@ -107,8 +108,10 @@ export default function EventCard({ event }: Props) {
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
           <Users className="w-3.5 h-3.5" />
           <span>
-            {event.competitorCount} other competitor
-            {event.competitorCount !== 1 ? "s" : ""}
+            {event.competitorCount} other{" "}
+            {event.isTeamEvent
+              ? event.competitorCount !== 1 ? "teams" : "team"
+              : event.competitorCount !== 1 ? "competitors" : "competitor"}
           </span>
         </div>
 

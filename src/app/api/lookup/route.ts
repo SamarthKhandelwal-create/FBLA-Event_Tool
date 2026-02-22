@@ -32,18 +32,48 @@ interface RawPerson {
 
 const schedule: Record<string, RawPerson> = scheduleData;
 
+/** Check whether an event type string indicates a team event. */
+function isTeamEvent(type: string): boolean {
+  return /team/i.test(type);
+}
+
 /**
- * Count how many other competitors are registered for the same event
- * (excludes the person being looked up).
+ * Count how many other competitors/teams are in the same event.
+ *
+ * For individual events, counts other people.
+ * For team events, counts other teams (unique schools), since teammates
+ * from the same school form a single competing unit.
  */
-function countCompetitors(eventName: string, personName: string): number {
+function countCompetitors(
+  eventName: string,
+  personName: string,
+  personSchool: string,
+  teamEvent: boolean,
+): number {
+  if (teamEvent) {
+    // Count distinct schools that have at least one person in this event,
+    // excluding the current person's school.
+    const schools = new Set<string>();
+    for (const person of Object.values(schedule)) {
+      if (person.school === personSchool) continue;
+      for (const e of person.events) {
+        if (e.competition === eventName) {
+          schools.add(person.school);
+          break;
+        }
+      }
+    }
+    return schools.size;
+  }
+
+  // Individual event — count other people.
   let count = 0;
   for (const person of Object.values(schedule)) {
     if (person.name === personName) continue;
     for (const e of person.events) {
       if (e.competition === eventName) {
         count++;
-        break; // same person counted once per event
+        break;
       }
     }
   }
@@ -79,6 +109,7 @@ export async function POST(request: NextRequest) {
         rubricUrl: string;
         bizybearUrl: string | null;
         isObjectiveTest: boolean;
+        isTeamEvent: boolean;
         competitorCount: number;
       }>;
     }> = [];
@@ -151,12 +182,14 @@ function enrichPerson(person: RawPerson) {
       .filter((e) => isRealEvent(e.competition))
       .map((e) => {
         const meta = getEventMetadata(e.competition);
+        const team = isTeamEvent(e.type);
         return {
           ...e,
           rubricUrl: meta?.rubricUrl ?? "",
           bizybearUrl: meta?.bizybearUrl ?? null,
           isObjectiveTest: e.category === "Objective Test",
-          competitorCount: countCompetitors(e.competition, person.name),
+          isTeamEvent: team,
+          competitorCount: countCompetitors(e.competition, person.name, person.school, team),
         };
       }),
   };
