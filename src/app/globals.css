@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* ── FBLA Brand Colors ── */
+  --color-navy: #0A2E7F;
+  --color-cobalt: #226ADD;
+  --color-gold: #F2A900;
+  --color-gray: #4A5568;
+  --color-light: #F8F9FF;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* ── Base tokens ── */
+  --color-background: #FFFFFF;
+  --color-foreground: #2D2B2B;
+
+  /* ── Font ── */
+  --font-sans: var(--font-montserrat);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Selection highlight ── */
+::selection {
+  background: #226ADD33;
+  color: #0A2E7F;
+}
+
+/* ── Focus ring utility ── */
+*:focus-visible {
+  outline: 2px solid #226ADD;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F9FF;
+}
+::-webkit-scrollbar-thumb {
+  background: #226ADD44;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #226ADD88;
 }

@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ohio FBLA Event Info Tool
+
+A web application for Ohio FBLA State Leadership Conference (SLC) 2026 competitors to look up their competition schedules, view event details, and access study resources.
+
+## Features
+
+- **Name Search** — look up any registered competitor by name (supports partial matching and "First Last" input)
+- **Event Cards** — displays schedule details, check-in / start times, and competitor counts for each event
+- **Rubric Links** — direct links to the official 2025–26 FBLA High School and Middle School guidelines PDFs
+- **Practice Questions** — links to BizYBear practice quizzes for every event
+- **Email Schedule** — send a formatted HTML summary of your schedule to any email address
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org) 16 (App Router, React 19)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com) v4
+- **Icons:** [Lucide React](https://lucide.dev)
+- **Email:** [Resend](https://resend.com)
+- **Hosting:** [Vercel](https://vercel.com)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Copy the example env file and add your Resend API key
+cp .env.local.example .env.local
+
+# Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to use the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── email/route.ts    # POST /api/email — sends schedule via Resend
+│   │   └── lookup/route.ts   # POST /api/lookup — searches the schedule data
+│   ├── globals.css            # Tailwind config & global styles
+│   ├── layout.tsx             # Root layout (Montserrat font, metadata)
+│   └── page.tsx               # Home page (hero, search, results grid)
+├── components/
+│   ├── EmailModal.tsx         # Email-your-schedule dialog
+│   ├── EventCard.tsx          # Individual event display card
+│   └── SearchForm.tsx         # Name search input & submit
+└── data/
+    ├── competition-schedule.json  # Parsed competitor schedule data
+    └── event-metadata.ts          # Event → rubric / BizYBear / type mapping
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable | Description |
+|---|---|
+| `RESEND_API_KEY` | API key from [Resend](https://resend.com) for sending emails |
