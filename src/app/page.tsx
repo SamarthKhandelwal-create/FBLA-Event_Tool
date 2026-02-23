@@ -97,12 +97,18 @@ export default function Home() {
           style={{ transform: `translateY(${scrollY * -0.1}px)` }}
         >
           <div className="max-w-3xl mx-auto text-center mb-10">
-            <p className="text-lg sm:text-2xl md:text-4xl tracking-[0.06em] uppercase text-gold font-black mb-4">
-              Vote Samarth Khandelwal for Webmaster
+            <p className="text-sm sm:text-base md:text-lg tracking-[0.08em] uppercase text-gold font-semibold mb-2">
+              Vote for
             </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
-              Ohio FBLA SLC
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight mb-3 text-white">
+              Samarth Khandelwal
             </h1>
+            <p className="text-lg sm:text-2xl md:text-3xl tracking-[0.06em] uppercase text-gold font-bold mb-6">
+              Webmaster
+            </p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
+              Ohio FBLA SLC
+            </h2>
             <div className="w-12 h-[2px] bg-gold mx-auto mb-5" />
             <p className="text-base sm:text-lg text-white/60 font-medium max-w-lg mx-auto leading-relaxed">
               Look up your competition schedule, events, rubrics &amp; practice
