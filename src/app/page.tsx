@@ -97,10 +97,10 @@ export default function Home() {
           style={{ transform: `translateY(${scrollY * -0.1}px)` }}
         >
           <div className="max-w-3xl mx-auto text-center mb-10">
-            <p className="text-xs tracking-[0.3em] uppercase text-white/50 font-semibold mb-4">
-              State Leadership Conference 2026
+            <p className="text-lg sm:text-2xl md:text-4xl tracking-[0.06em] uppercase text-gold font-black mb-4">
+              Vote Samarth Khandelwal for Webmaster
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-4">
               Ohio FBLA SLC
             </h1>
             <div className="w-12 h-[2px] bg-gold mx-auto mb-5" />
@@ -191,6 +191,14 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      <footer className="border-t border-gray-200/70 mt-8">
+        <div className="max-w-6xl mx-auto px-4 py-6 text-center">
+          <p className="text-sm font-medium text-navy/70 tracking-wide">
+            Built by Samarth Khandelwal
+          </p>
+        </div>
+      </footer>
 
       {/* ── Email Modal ── */}
       {emailPerson && (
