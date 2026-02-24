@@ -40,6 +40,10 @@ function isTeamEvent(type: string): boolean {
 /**
  * Count how many other competitors/teams are in the same event.
  *
+ * Matches on both competition name AND category to correctly separate events
+ * that share a name but differ in type (e.g. "Business Ethics" Objective Test
+ * vs "Business Ethics" Performance).
+ *
  * For individual events, counts other people.
  * For team events, counts other teams identified by unique (school + startTime)
  * pairs, since a school may enter multiple teams in the same event
@@ -47,6 +51,7 @@ function isTeamEvent(type: string): boolean {
  */
 function countCompetitors(
   eventName: string,
+  eventCategory: string,
   personName: string,
   personSchool: string,
   teamEvent: boolean,
@@ -58,7 +63,7 @@ function countCompetitors(
     const teams = new Set<string>();
     for (const person of Object.values(schedule)) {
       for (const e of person.events) {
-        if (e.competition === eventName) {
+        if (e.competition === eventName && e.category === eventCategory) {
           const teamKey = `${person.school}|${e.startTime}`;
           // Skip the queried person's own team
           if (person.school === personSchool && e.startTime === personStartTime) continue;
@@ -74,7 +79,7 @@ function countCompetitors(
   for (const person of Object.values(schedule)) {
     if (person.name === personName) continue;
     for (const e of person.events) {
-      if (e.competition === eventName) {
+      if (e.competition === eventName && e.category === eventCategory) {
         count++;
         break;
       }
@@ -192,7 +197,7 @@ function enrichPerson(person: RawPerson) {
           bizybearUrl: meta?.bizybearUrl ?? null,
           isObjectiveTest: e.category === "Objective Test",
           isTeamEvent: team,
-          competitorCount: countCompetitors(e.competition, person.name, person.school, team, e.startTime),
+          competitorCount: countCompetitors(e.competition, e.category, person.name, person.school, team, e.startTime),
         };
       }),
   };
